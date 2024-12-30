@@ -27,7 +27,6 @@ class LoginViewBody extends StatelessWidget {
             Text.rich(
               TextSpan(
                 style: TextStyle(
-                  fontFamily: 'Poppins',
                   fontSize: 45,
                   color: Colors.white,
                 ),

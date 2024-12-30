@@ -51,17 +51,19 @@ class AttachImageButton extends StatelessWidget {
                           image!,
                           fit: BoxFit.cover,
                           width: double.infinity,
-                          height: 60.0,
+                          height: 70.0,
                         ),
                       ),
                 SizedBox(height: 8),
-                Text(
-                  'JPEG (JPG) - PNG',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12.0,
+                // إخفاء النص عند إضافة الصورة
+                if (image == null)
+                  Text(
+                    'JPEG (JPG) - PNG',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
                   ),
-                ),
               ],
             ),
           ),

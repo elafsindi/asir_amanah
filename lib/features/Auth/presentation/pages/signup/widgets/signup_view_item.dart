@@ -19,7 +19,6 @@ class SignupViewItem extends StatelessWidget {
           Text(
             text,
             style: TextStyle(
-              fontFamily: 'Poppins',
               fontSize: 16,
               color: Colors.white,
               fontWeight: FontWeight.w600,

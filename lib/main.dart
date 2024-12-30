@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'features/splash/presentation/splash_view.dart';
 
+
 void main() {
   runApp(const AsirAmanah());
 }
@@ -12,7 +13,10 @@ class AsirAmanah extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      // theme: ThemeData(fontFamily: 'Poppins'),
+      theme: ThemeData(
+        fontFamily: 'Tajawal'
+        ),
+      textDirection: TextDirection.rtl,
       debugShowCheckedModeBanner: false,
        home: SplashView(),
     );

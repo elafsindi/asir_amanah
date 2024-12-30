@@ -27,7 +27,6 @@ class WelcomeScreen extends StatelessWidget {
           Text.rich(
             TextSpan(
               style: TextStyle(
-                fontFamily: 'Poppins',
                 fontSize: 51,
                 color: Colors.white,
               ),

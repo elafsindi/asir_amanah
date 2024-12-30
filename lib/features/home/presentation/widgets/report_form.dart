@@ -1,3 +1,4 @@
+import 'package:asir_amanah/features/onBoarding/presentation/widgets/custom_bottons.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -12,7 +13,7 @@ class ReportForm extends StatefulWidget {
 }
 
 class _ReportFormState extends State<ReportForm> {
-  String selectedIssueType = 'اختيار نوع البلاغ';
+  String selectedIssueType = 'اختر نوع البلاغ';
   String description = '';
   XFile? _image;
   final ImagePicker _picker = ImagePicker();
@@ -59,7 +60,7 @@ class _ReportFormState extends State<ReportForm> {
               selectedIssueType = newValue!;
             });
           },
-          items: ['اختيار نوع البلاغ', 'مشكلة تقنية', 'مشكلة في الخدمة', 'مشكلة في الطلب']
+          items: ['اختر نوع البلاغ', 'مشكلة تقنية', 'مشكلة في الخدمة', 'مشكلة في الطلب']
               .map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -74,11 +75,15 @@ class _ReportFormState extends State<ReportForm> {
           onChanged: (value) => description = value,
         ),
         SizedBox(height: 16),
-        ElevatedButton(onPressed: _pickImage, child: Text('إرفاق صورة للبلاغ')),
+        CustomGeneralButton(onTap: _pickImage, 
+        // child: Text('إرفاق صورة للبلاغ')
+        ),
         if (_image != null)
           Image.file(File(_image!.path), height: 200, width: 200),
         SizedBox(height: 16),
-        ElevatedButton(onPressed: _submitReport, child: Text('تقديم البلاغ')),
+
+        CustomGeneralButton(onTap: _submitReport)
+        // child: Text('تقديم البلاغ')),
       ],
     );
   }

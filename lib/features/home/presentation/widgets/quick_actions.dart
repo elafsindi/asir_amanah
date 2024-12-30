@@ -1,3 +1,4 @@
+// Import necessary packages
 import 'dart:io';
 
 import 'package:asir_amanah/core/constants.dart';
@@ -5,6 +6,9 @@ import 'package:asir_amanah/core/widgets/attach_image_button.dart';
 import 'package:asir_amanah/core/widgets/space_widget.dart';
 import 'package:asir_amanah/features/home/presentation/widgets/issue_description_field.dart';
 import 'package:asir_amanah/features/home/presentation/widgets/issue_type_dropdown.dart';
+import 'package:asir_amanah/features/onBoarding/presentation/widgets/custom_bottons.dart';
+import 'package:asir_amanah/features/requests/presentation/requests_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -43,21 +47,23 @@ class _QuickActionsState extends State<QuickActions> {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          SizedBox(height: 25),
           Text(
             'تم إرسال البلاغ بنجاح!',
             style: TextStyle(
                 color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 16),
+          SizedBox(height: 25),
           Text(
             'رقم البلاغ: $reportNumber',
             style: TextStyle(color: Colors.white, fontSize: 16),
           ),
-          SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: _resetState, // العودة إلى الإجراءات السريعة
-            child: Text('العودة إلى القائمة'),
+          SizedBox(height: 45),
+          CustomGeneralButton(
+            onTap: _resetState,
+            text: 'العودة إلى القائمة',
           ),
+          SizedBox(height: 25),
         ],
       );
     }
@@ -75,61 +81,70 @@ class _QuickActionsState extends State<QuickActions> {
     }
 
     // قائمة الإجراءات السريعة
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'الخدمات السريعة',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 12.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'الخدمات السريعة',
+            style: TextStyle(
+              color: Color(kMainColor),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        SizedBox(height: 16),
-        TextButton.icon(
-          onPressed: () {
-            setState(() {
-              isReportFormVisible = true; // عرض فورم البلاغ
-            });
-          },
-          icon: Icon(Icons.report_problem, color: Colors.white),
-          label: Text(
-            'الإبلاغ عن مشكلة',
-            style: TextStyle(color: Colors.white),
+          SizedBox(height: 16),
+          TextButton.icon(
+            onPressed: () {
+              setState(() {
+                isReportFormVisible = true; // عرض فورم البلاغ
+              });
+            },
+            icon: Icon(Icons.report_problem, color: Colors.white),
+            label: Text(
+              'الإبلاغ عن مشكلة',
+              style: TextStyle(color: Colors.white),
+            ),
+            style: TextButton.styleFrom(
+              alignment: Alignment.centerRight,
+              padding: EdgeInsets.symmetric(horizontal: 0),
+            ),
           ),
-          style: TextButton.styleFrom(
-            alignment: Alignment.centerRight,
-            padding: EdgeInsets.symmetric(horizontal: 0),
+          Divider(color: Colors.white.withOpacity(0.5), thickness: 1),
+          TextButton.icon(
+            onPressed: () {
+              // عند الضغط على الزر، سيتم الانتقال إلى صفحة الطلبات
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => RequestsView()),
+              );
+            },
+            icon: Icon(Icons.track_changes, color: Colors.white),
+            label: Text(
+              'متابعة الطلبات',
+              style: TextStyle(color: Colors.white),
+            ),
+            style: TextButton.styleFrom(
+              alignment: Alignment.centerRight,
+              padding: EdgeInsets.symmetric(horizontal: 0),
+            ),
           ),
-        ),
-        Divider(color: Colors.white.withOpacity(0.5), thickness: 1),
-        TextButton.icon(
-          onPressed: () => widget.onMenuSelected(2),
-          icon: Icon(Icons.track_changes, color: Colors.white),
-          label: Text(
-            'متابعة الطلبات',
-            style: TextStyle(color: Colors.white),
+          Divider(color: Colors.white.withOpacity(0.5), thickness: 1),
+          TextButton.icon(
+            onPressed: () => widget.onMenuSelected(3),
+            icon: Icon(Icons.request_page, color: Colors.white),
+            label: Text(
+              'تقديم طلب خدمة',
+              style: TextStyle(color: Colors.white),
+            ),
+            style: TextButton.styleFrom(
+              alignment: Alignment.centerRight,
+              padding: EdgeInsets.symmetric(horizontal: 0),
+            ),
           ),
-          style: TextButton.styleFrom(
-            alignment: Alignment.centerRight,
-            padding: EdgeInsets.symmetric(horizontal: 0),
-          ),
-        ),
-        Divider(color: Colors.white.withOpacity(0.5), thickness: 1),
-        TextButton.icon(
-          onPressed: () => widget.onMenuSelected(3),
-          icon: Icon(Icons.request_page, color: Colors.white),
-          label: Text(
-            'تقديم طلب خدمة',
-            style: TextStyle(color: Colors.white),
-          ),
-          style: TextButton.styleFrom(
-            alignment: Alignment.centerRight,
-            padding: EdgeInsets.symmetric(horizontal: 0),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -147,47 +162,80 @@ class ReportForm extends StatefulWidget {
 }
 
 class _ReportFormState extends State<ReportForm> {
-  String selectedIssueType = 'اختيار نوع البلاغ';
+  String selectedIssueType = 'اختر نوع البلاغ';
   String description = '';
   File? _image;
 
   void _pickImage() async {
     final picker = ImagePicker();
-    final pickedFile = await showModalBottomSheet<XFile>(
+    await showCupertinoModalPopup(
       context: context,
       builder: (context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: Icon(Icons.camera_alt),
-              title: Text('التقاط صورة بالكاميرا'),
-              onTap: () async {
-                Navigator.pop(context);
-                final pickedFile =
-                    await picker.pickImage(source: ImageSource.camera);
-                if (pickedFile != null) {
-                  setState(() {
-                    _image = File(pickedFile.path);
-                  });
-                }
-              },
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: CupertinoActionSheet(
+            title: Text(
+              'اختر طريقة إرفاق الصورة',
+              style: TextStyle(fontSize: 18),
             ),
-            ListTile(
-              leading: Icon(Icons.photo_library),
-              title: Text('اختيار صورة من المعرض'),
-              onTap: () async {
+            actions: [
+              CupertinoActionSheetAction(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  final pickedFile =
+                      await picker.pickImage(source: ImageSource.camera);
+                  if (pickedFile != null) {
+                    setState(() {
+                      _image = File(pickedFile.path);
+                    });
+                  }
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(CupertinoIcons.camera, color: Colors.blue),
+                    SizedBox(width: 8),
+                    Text(
+                      'التقاط صورة بالكاميرا',
+                      style: TextStyle(fontSize: 16, color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  final pickedFile =
+                      await picker.pickImage(source: ImageSource.gallery);
+                  if (pickedFile != null) {
+                    setState(() {
+                      _image = File(pickedFile.path);
+                    });
+                  }
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(CupertinoIcons.photo, color: Colors.blue),
+                    SizedBox(width: 8),
+                    Text(
+                      'اختيار صورة من المعرض',
+                      style: TextStyle(fontSize: 16, color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
                 Navigator.pop(context);
-                final pickedFile =
-                    await picker.pickImage(source: ImageSource.gallery);
-                if (pickedFile != null) {
-                  setState(() {
-                    _image = File(pickedFile.path);
-                  });
-                }
               },
+              child: Text(
+                'إلغاء',
+                style: TextStyle(color: CupertinoColors.destructiveRed),
+              ),
             ),
-          ],
+          ),
         );
       },
     );
@@ -247,23 +295,18 @@ class _ReportFormState extends State<ReportForm> {
           onPickImage: _pickImage,
         ),
 
-        SizedBox(height: 16),
+        SizedBox(height: 25),
 
-        // Submit button
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blueAccent,
-            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          ),
-          onPressed: () {
+        // CustomGeneralButton instead of ElevatedButton
+        CustomGeneralButton(
+          text: 'تقديم البلاغ',
+          onTap: () {
             final reportNumber =
                 "BLG${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}";
             widget.onReportSubmitted(reportNumber);
           },
-          child: Text('تقديم البلاغ', style: TextStyle(fontSize: 16)),
         ),
+        SizedBox(height: 16),
       ],
     );
   }

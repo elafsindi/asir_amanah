@@ -8,10 +8,10 @@ class OnBordingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackground,
+      backgroundColor: Color(kBackground),
       body: Directionality(
       textDirection: TextDirection.rtl,
       child: OnBordingBody()),
     );
   }
-}
+} 

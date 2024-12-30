@@ -9,32 +9,40 @@ class IssueDescriptionField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-        labelText: 'وصف البلاغ',
-        labelStyle: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'وصف البلاغ',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 14.0,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        alignLabelWithHint: true,
-        filled: true,
-        fillColor: Colors.transparent,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Color(kMainColor), width: 2.0),
+        SizedBox(height: 8),
+        TextField(
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.transparent,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Color(kMainColor), width: 2.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Color(kMainColor), width: 2.0),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Color(kMainColor), width: 2.0),
+            ),
+          ),
+          maxLines: 4,
+          onChanged: onChanged,
+          style: TextStyle(color: Colors.white),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Color(kMainColor), width: 2.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Color(kMainColor), width: 2.0),
-        ),
-      ),
-      maxLines: 4,
-      onChanged: onChanged,
-      style: TextStyle(color: Colors.white),
+      ],
     );
   }
 }

@@ -13,7 +13,7 @@ class IssueTypeDropdown extends StatelessWidget {
       height: 60.0,
       child: InputDecorator(
         decoration: InputDecoration(
-          labelText: 'اختيار نوع البلاغ',
+          labelText: 'اختر نوع البلاغ',
           labelStyle: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -40,7 +40,7 @@ class IssueTypeDropdown extends StatelessWidget {
             onChanged(newValue!);
           },
           items: [
-            'اختيار نوع البلاغ',
+            'اختر نوع البلاغ',
             'مشكلة تقنية',
             'مشكلة في الخدمة',
             'مشكلة في الطلب'

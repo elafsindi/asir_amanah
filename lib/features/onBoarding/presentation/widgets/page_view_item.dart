@@ -22,7 +22,6 @@ class PageViewItem extends StatelessWidget {
           Text(
             title!,
             style: TextStyle(
-              fontFamily: 'Poppins',
               fontSize: 20,
               color: Colors.white,
               fontWeight: FontWeight.w900,
@@ -34,7 +33,6 @@ class PageViewItem extends StatelessWidget {
             subTitle!,
             style: TextStyle(
               // fontWeight: FontWeight.bold,
-              fontFamily: 'Poppins',
               fontSize: 15,
               color: Colors.white,
             ),

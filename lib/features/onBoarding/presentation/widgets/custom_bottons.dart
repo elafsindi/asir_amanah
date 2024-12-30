@@ -16,11 +16,11 @@ class CustomGeneralButton extends StatelessWidget {
         width: SizeConfig.screenWidth,
         decoration: BoxDecoration(
           color: Color(kMainColor),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(16),
         ),
         child: Center(
           child: Text(
-            text!,
+            text ?? '', // التعامل مع النص إذا كان null
             style: TextStyle(
               fontSize: 14,
               color: const Color(0xffffffff),
@@ -51,7 +51,7 @@ class CustomButtonWithIcon extends StatelessWidget {
         width: SizeConfig.screenWidth,
         decoration: BoxDecoration(
               color: Color(0xff30928f),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: Color(0xff30928f),
             )),
@@ -67,7 +67,6 @@ class CustomButtonWithIcon extends StatelessWidget {
               text,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontFamily: 'Poppins',
                 fontSize: 12,
                 color: Colors.white,
               ),

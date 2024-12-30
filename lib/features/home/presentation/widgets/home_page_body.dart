@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:asir_amanah/core/blurred_container.dart';
+import 'package:asir_amanah/features/home/presentation/widgets/blurred_container.dart';
 import 'package:flutter/material.dart';
 import 'package:asir_amanah/features/home/presentation/widgets/menu_header.dart';
 import 'package:asir_amanah/features/home/presentation/widgets/quick_actions.dart';
