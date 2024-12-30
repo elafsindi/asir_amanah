@@ -1,5 +1,12 @@
+import 'dart:io';
+
 import 'package:asir_amanah/core/constants.dart';
+import 'package:asir_amanah/core/widgets/attach_image_button.dart';
+import 'package:asir_amanah/core/widgets/space_widget.dart';
+import 'package:asir_amanah/features/home/presentation/widgets/issue_description_field.dart';
+import 'package:asir_amanah/features/home/presentation/widgets/issue_type_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class QuickActions extends StatefulWidget {
   final Function(int) onMenuSelected;
@@ -38,7 +45,8 @@ class _QuickActionsState extends State<QuickActions> {
         children: [
           Text(
             'تم إرسال البلاغ بنجاح!',
-            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 16),
           Text(
@@ -125,11 +133,13 @@ class _QuickActionsState extends State<QuickActions> {
     );
   }
 }
+
 class ReportForm extends StatefulWidget {
   final Function(String) onReportSubmitted;
   final VoidCallback onCancel;
 
-  const ReportForm({required this.onReportSubmitted, required this.onCancel, Key? key})
+  const ReportForm(
+      {required this.onReportSubmitted, required this.onCancel, Key? key})
       : super(key: key);
 
   @override
@@ -139,6 +149,49 @@ class ReportForm extends StatefulWidget {
 class _ReportFormState extends State<ReportForm> {
   String selectedIssueType = 'اختيار نوع البلاغ';
   String description = '';
+  File? _image;
+
+  void _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await showModalBottomSheet<XFile>(
+      context: context,
+      builder: (context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: Icon(Icons.camera_alt),
+              title: Text('التقاط صورة بالكاميرا'),
+              onTap: () async {
+                Navigator.pop(context);
+                final pickedFile =
+                    await picker.pickImage(source: ImageSource.camera);
+                if (pickedFile != null) {
+                  setState(() {
+                    _image = File(pickedFile.path);
+                  });
+                }
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.photo_library),
+              title: Text('اختيار صورة من المعرض'),
+              onTap: () async {
+                Navigator.pop(context);
+                final pickedFile =
+                    await picker.pickImage(source: ImageSource.gallery);
+                if (pickedFile != null) {
+                  setState(() {
+                    _image = File(pickedFile.path);
+                  });
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,73 +203,59 @@ class _ReportFormState extends State<ReportForm> {
           children: [
             IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.white, size: 24),
-              onPressed: widget.onCancel, // العودة إلى الإجراءات السريعة
+              onPressed: widget.onCancel,
             ),
             SizedBox(width: 8),
             Text(
               'الإبلاغ عن مشكلة',
-              style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
             ),
           ],
         ),
         SizedBox(height: 16),
 
-        // Issue type dropdown
-        InputDecorator(
-          decoration: InputDecoration(
-            labelText: 'اختيار نوع البلاغ',
-            labelStyle: TextStyle(color: Colors.white),
-            filled: true,
-            fillColor: Colors.white.withOpacity(0.2),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Color(kMainColor).withOpacity(0.5)),
-            ),
-          ),
-          child: DropdownButton<String>(
-            isExpanded: true,
-            value: selectedIssueType,
-            onChanged: (String? newValue) {
-              setState(() {
-                selectedIssueType = newValue!;
-              });
-            },
-            items: ['اختيار نوع البلاغ', 'مشكلة تقنية', 'مشكلة في الخدمة', 'مشكلة في الطلب']
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value, style: TextStyle(color: Colors.white)),
-              );
-            }).toList(),
-            dropdownColor: Colors.black.withOpacity(0.7),
-          ),
+        // Call the IssueTypeDropdown widget
+        IssueTypeDropdown(
+          selectedIssueType: selectedIssueType,
+          onChanged: (value) {
+            setState(() {
+              selectedIssueType = value;
+            });
+          },
         ),
+
         SizedBox(height: 16),
 
-        // Description TextField
-        TextField(
-          decoration: InputDecoration(
-            labelText: 'وصف البلاغ',
-            labelStyle: TextStyle(color: Colors.white),
-            filled: true,
-            fillColor: Colors.white.withOpacity(0.2),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
-            ),
-          ),
-          maxLines: 4,
-          onChanged: (value) => description = value,
-          style: TextStyle(color: Colors.white),
+        // Call the IssueDescriptionField widget
+        IssueDescriptionField(
+          description: description,
+          onChanged: (value) {
+            setState(() {
+              description = value;
+            });
+          },
         ),
+
+        SizedBox(height: 16),
+
+        // Call the AttachImageButton widget
+        AttachImageButton(
+          image: _image,
+          onPickImage: _pickImage,
+        ),
+
         SizedBox(height: 16),
 
         // Submit button
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blueAccent, // background color
+            backgroundColor: Colors.blueAccent,
             padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
           onPressed: () {
             final reportNumber =
