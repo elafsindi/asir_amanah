@@ -2,6 +2,7 @@ import 'package:asir_amanah/core/background.dart';
 import 'package:asir_amanah/core/utils/size_config.dart';
 import 'package:asir_amanah/core/widgets/coustom_indicator.dart';
 import 'package:asir_amanah/features/Auth/presentation/pages/login/login_view.dart';
+import 'package:asir_amanah/features/home/presentation/home_page.dart';
 import 'package:asir_amanah/features/onBoarding/presentation/welcome_screen.dart';
 import 'package:asir_amanah/features/onBoarding/presentation/widgets/custom_bottons.dart';
 import 'package:asir_amanah/features/onBoarding/presentation/widgets/custom_page_view.dart';
@@ -58,7 +59,7 @@ class _OnBordingBodyState extends State<OnBordingBody> {
               left: 32,
               child: GestureDetector(
                 onTap: () {
-                    Get.to(() => LoginView(), transition: Transition.leftToRight , duration: Duration(milliseconds: 500));
+                    Get.to(() => HomePage(), transition: Transition.leftToRight , duration: Duration(milliseconds: 500));
                 },
                 child: Text(
                   'تخطي',

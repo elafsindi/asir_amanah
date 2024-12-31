@@ -12,7 +12,7 @@ class MenuHeader extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
         decoration: BoxDecoration(
-          color: Color(0xFF48677B).withOpacity(0.4),
+          color: Color(0xFF48677B).withOpacity(0.3),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Row(
@@ -24,11 +24,48 @@ class MenuHeader extends StatelessWidget {
                   color: Color(0xFF48677B).withOpacity(0.9),
                   icon: Icon(Icons.grid_view, color: Colors.white, size: 20),
                   onSelected: onMenuSelection,
+                  offset: Offset(0, 40),
                   itemBuilder: (BuildContext context) => [
-                    PopupMenuItem<int>(value: 0, child: Text('تسجيل الدخول')),
-                    PopupMenuItem<int>(value: 1, child: Text('الإبلاغ عن مشكلة')),
-                    PopupMenuItem<int>(value: 2, child: Text('متابعة الطلبات')),
-                    PopupMenuItem<int>(value: 3, child: Text('تقديم طلب خدمة')),
+                    PopupMenuItem<int>(
+                      value: 0,
+                      child: Text(
+                        'تسجيل الدخول',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    PopupMenuItem<int>(
+                      value: 1,
+                      child: Text(
+                        'الإبلاغ عن مشكلة',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    PopupMenuItem<int>(
+                      value: 2,
+                      child: Text(
+                        'تقديم طلب خدمة',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    PopupMenuItem<int>(
+                      value: 3,
+                      child: Text(
+                        'متابعة الطلبات',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 SizedBox(width: 8),

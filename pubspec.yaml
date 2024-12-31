@@ -36,6 +36,8 @@ dependencies:
   get_it: ^8.0.3
   get_storage: ^2.1.1
   image_picker: ^0.8.5+3
+  google_maps_flutter: ^2.2.0
+  location: ^5.0.0
 
 dev_dependencies:
   flutter_lints: ^5.0.0
@@ -69,7 +71,7 @@ flutter:
         - asset: assets/fonts/Roboto-Light.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
-    - family: Tajawal
+    - family: Roboto
       fonts:
         - asset: assets/fonts/Tajawal-Regular.ttf
 
