@@ -1,16 +1,10 @@
-// Import necessary packages
-import 'dart:io';
-
 import 'package:asir_amanah/core/constants.dart';
-import 'package:asir_amanah/core/widgets/attach_image_button.dart';
-import 'package:asir_amanah/core/widgets/space_widget.dart';
-import 'package:asir_amanah/features/home/presentation/widgets/issue_description_field.dart';
-import 'package:asir_amanah/features/home/presentation/widgets/issue_type_dropdown.dart';
+import 'package:asir_amanah/features/home/presentation/widgets/quick_actions_list.dart';
+import 'package:asir_amanah/features/home/presentation/widgets/report_form.dart';
+import 'package:asir_amanah/features/home/presentation/widgets/service_request_form.dart';
 import 'package:asir_amanah/features/onBoarding/presentation/widgets/custom_bottons.dart';
 import 'package:asir_amanah/features/requests/presentation/requests_view.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class QuickActions extends StatefulWidget {
   final Function(int) onMenuSelected;
@@ -23,13 +17,23 @@ class QuickActions extends StatefulWidget {
 
 class _QuickActionsState extends State<QuickActions> {
   bool isReportFormVisible = false;
-  bool isReportSubmitted = false; // حالة إرسال البلاغ
+  bool isReportSubmitted = false;
+  bool isServiceRequestForm = false;
+  bool isRequestSubmitted = false;
   String reportNumber = '';
+  String requestSuccess = '';
 
   void _onReportSubmitted(String reportNumber) {
     setState(() {
       this.reportNumber = reportNumber;
-      isReportSubmitted = true; // عرض صفحة النجاح
+      isReportSubmitted = true;
+    });
+  }
+
+  void _onRequestSubmitted(String requestSuccess) {
+    setState(() {
+      this.requestSuccess = requestSuccess;
+      isRequestSubmitted = true;
     });
   }
 
@@ -37,277 +41,148 @@ class _QuickActionsState extends State<QuickActions> {
     setState(() {
       isReportFormVisible = false;
       isReportSubmitted = false;
+      isServiceRequestForm = false;
+      isRequestSubmitted = false;
+
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    // حالة إرسال البلاغ
     if (isReportSubmitted) {
-      // صفحة نجاح البلاغ
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(height: 25),
-          Text(
-            'تم إرسال البلاغ بنجاح!',
-            style: TextStyle(
-                color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 25),
-          Text(
-            'رقم البلاغ: $reportNumber',
-            style: TextStyle(color: Colors.white, fontSize: 16),
-          ),
-          SizedBox(height: 45),
-          CustomGeneralButton(
-            onTap: _resetState,
-            text: 'العودة إلى القائمة',
-          ),
-          SizedBox(height: 25),
-        ],
-      );
+      return _buildReportSubmitted();
     }
 
+    // حالة عرض فورم البلاغ
     if (isReportFormVisible) {
-      // فورم البلاغ
-      return ReportForm(
-        onReportSubmitted: _onReportSubmitted,
-        onCancel: () {
-          setState(() {
-            isReportFormVisible = false; // العودة إلى قائمة الإجراءات
-          });
-        },
-      );
+      return _buildReportForm();
     }
 
-    // قائمة الإجراءات السريعة
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 12.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'الخدمات السريعة',
-            style: TextStyle(
-              color: Color(kMainColor),
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 16),
-          TextButton.icon(
-            onPressed: () {
-              setState(() {
-                isReportFormVisible = true; // عرض فورم البلاغ
-              });
-            },
-            icon: Icon(Icons.report_problem, color: Colors.white),
-            label: Text(
-              'الإبلاغ عن مشكلة',
-              style: TextStyle(color: Colors.white),
-            ),
-            style: TextButton.styleFrom(
-              alignment: Alignment.centerRight,
-              padding: EdgeInsets.symmetric(horizontal: 0),
-            ),
-          ),
-          Divider(color: Colors.white.withOpacity(0.5), thickness: 1),
-          TextButton.icon(
-            onPressed: () {
-              // عند الضغط على الزر، سيتم الانتقال إلى صفحة الطلبات
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => RequestsView()),
-              );
-            },
-            icon: Icon(Icons.track_changes, color: Colors.white),
-            label: Text(
-              'متابعة الطلبات',
-              style: TextStyle(color: Colors.white),
-            ),
-            style: TextButton.styleFrom(
-              alignment: Alignment.centerRight,
-              padding: EdgeInsets.symmetric(horizontal: 0),
-            ),
-          ),
-          Divider(color: Colors.white.withOpacity(0.5), thickness: 1),
-          TextButton.icon(
-            onPressed: () => widget.onMenuSelected(3),
-            icon: Icon(Icons.request_page, color: Colors.white),
-            label: Text(
-              'تقديم طلب خدمة',
-              style: TextStyle(color: Colors.white),
-            ),
-            style: TextButton.styleFrom(
-              alignment: Alignment.centerRight,
-              padding: EdgeInsets.symmetric(horizontal: 0),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+    if (isRequestSubmitted) {
+      return _buildRequestSubmitted();
+    }
 
-class ReportForm extends StatefulWidget {
-  final Function(String) onReportSubmitted;
-  final VoidCallback onCancel;
+    // حالة عرض فورم الخدمة
+    if (isServiceRequestForm) {
+      return _buildServiceRequestForm();
+    }
 
-  const ReportForm(
-      {required this.onReportSubmitted, required this.onCancel, Key? key})
-      : super(key: key);
-
-  @override
-  _ReportFormState createState() => _ReportFormState();
-}
-
-class _ReportFormState extends State<ReportForm> {
-  String selectedIssueType = 'اختر نوع البلاغ';
-  String description = '';
-  File? _image;
-
-  void _pickImage() async {
-    final picker = ImagePicker();
-    await showCupertinoModalPopup(
-      context: context,
-      builder: (context) {
-        return Directionality(
-          textDirection: TextDirection.rtl,
-          child: CupertinoActionSheet(
-            title: Text(
-              'اختر طريقة إرفاق الصورة',
-              style: TextStyle(fontSize: 18),
-            ),
-            actions: [
-              CupertinoActionSheetAction(
-                onPressed: () async {
-                  Navigator.pop(context);
-                  final pickedFile =
-                      await picker.pickImage(source: ImageSource.camera);
-                  if (pickedFile != null) {
-                    setState(() {
-                      _image = File(pickedFile.path);
-                    });
-                  }
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(CupertinoIcons.camera, color: Colors.blue),
-                    SizedBox(width: 8),
-                    Text(
-                      'التقاط صورة بالكاميرا',
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-              CupertinoActionSheetAction(
-                onPressed: () async {
-                  Navigator.pop(context);
-                  final pickedFile =
-                      await picker.pickImage(source: ImageSource.gallery);
-                  if (pickedFile != null) {
-                    setState(() {
-                      _image = File(pickedFile.path);
-                    });
-                  }
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(CupertinoIcons.photo, color: Colors.blue),
-                    SizedBox(width: 8),
-                    Text(
-                      'اختيار صورة من المعرض',
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-            cancelButton: CupertinoActionSheetAction(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                'إلغاء',
-                style: TextStyle(color: CupertinoColors.destructiveRed),
-              ),
-            ),
-          ),
+    // عرض قائمة الإجراءات السريعة
+return QuickActionsList(
+      onReportPressed: () {
+        setState(() {
+          isReportFormVisible = true;
+        });
+      },
+      onServiceRequestPressed: () {
+        setState(() {
+          isServiceRequestForm = true;
+        });
+      },
+      onRequestsPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => RequestsView()),
         );
       },
-    );
-  }
+    );  }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildReportSubmitted() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Header with back button and title
-        Row(
-          children: [
-            IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.white, size: 24),
-              onPressed: widget.onCancel,
-            ),
-            SizedBox(width: 8),
-            Text(
-              'الإبلاغ عن مشكلة',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
+      mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      SizedBox(height: 25),
+      Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Color(kMainColor).withOpacity(0.5), 
+              spreadRadius: 3,
+              blurRadius: 35, 
+              offset: Offset(0, 0), 
             ),
           ],
         ),
-        SizedBox(height: 16),
-
-        // Call the IssueTypeDropdown widget
-        IssueTypeDropdown(
-          selectedIssueType: selectedIssueType,
-          onChanged: (value) {
-            setState(() {
-              selectedIssueType = value;
-            });
-          },
+        child: Image.asset(
+          'assets/imgs/success.png', 
+          width: 120, 
+          height: 120,
         ),
-
-        SizedBox(height: 16),
-
-        // Call the IssueDescriptionField widget
-        IssueDescriptionField(
-          description: description,
-          onChanged: (value) {
-            setState(() {
-              description = value;
-            });
-          },
+      ),
+      SizedBox(height: 45),
+        Text(
+          'تم إرسال البلاغ بنجاح!',
+          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
         ),
-
-        SizedBox(height: 16),
-
-        // Call the AttachImageButton widget
-        AttachImageButton(
-          image: _image,
-          onPickImage: _pickImage,
-        ),
-
         SizedBox(height: 25),
-
-        // CustomGeneralButton instead of ElevatedButton
-        CustomGeneralButton(
-          text: 'تقديم البلاغ',
-          onTap: () {
-            final reportNumber =
-                "BLG${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}";
-            widget.onReportSubmitted(reportNumber);
-          },
+        Text(
+          'رقم البلاغ: $reportNumber',
+          style: TextStyle(color: Colors.white, fontSize: 16),
         ),
-        SizedBox(height: 16),
+        SizedBox(height: 40),
+        CustomGeneralButton(
+          onTap: _resetState,
+          text: 'العودة إلى القائمة',
+        ),
+        SizedBox(height: 25),
       ],
+    );
+  }
+Widget _buildRequestSubmitted() {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      SizedBox(height: 25),
+      Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Color(kMainColor).withOpacity(0.5), 
+              spreadRadius: 3,
+              blurRadius: 35, 
+              offset: Offset(0, 0), 
+            ),
+          ],
+        ),
+        child: Image.asset(
+          'assets/imgs/success.png', 
+          width: 120, 
+          height: 120,
+        ),
+      ),
+      SizedBox(height: 45),
+      Text(
+        'تم إرسال الطلب بنجاح!',
+        style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+      SizedBox(height: 25),
+      Text(
+        'رقم الطلب: $requestSuccess',
+        style: TextStyle(color: Colors.white, fontSize: 16),
+      ),
+      SizedBox(height: 40),
+      CustomGeneralButton(
+        onTap: _resetState,
+        text: 'العودة إلى القائمة',
+      ),
+      SizedBox(height: 25),
+    ],
+  );
+}
+  Widget _buildReportForm() {
+    return ReportForm(
+      onReportSubmitted: _onReportSubmitted,
+      onCancel: _resetState,
+    );
+  }
+
+  Widget _buildServiceRequestForm() {
+    return ServiceRequestForm(
+      onRequestSubmitted: _onRequestSubmitted,
+      onCancel: _resetState,
     );
   }
 }

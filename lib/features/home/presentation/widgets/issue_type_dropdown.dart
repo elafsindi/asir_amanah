@@ -4,8 +4,15 @@ import 'package:flutter/material.dart';
 class IssueTypeDropdown extends StatelessWidget {
   final String selectedIssueType;
   final Function(String) onChanged;
+  final String labelText; // النص المخصص للعنوان
+  final List<String> items; // قائمة العناصر القابلة للاختيار
 
-  IssueTypeDropdown({required this.selectedIssueType, required this.onChanged});
+  IssueTypeDropdown({
+    required this.selectedIssueType,
+    required this.onChanged,
+    required this.labelText, // تمرير النص عند الاستدعاء
+    required this.items, // تمرير قائمة العناصر عند الاستدعاء
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +20,7 @@ class IssueTypeDropdown extends StatelessWidget {
       height: 60.0,
       child: InputDecorator(
         decoration: InputDecoration(
-          labelText: 'اختر نوع البلاغ',
+          labelText: labelText, // استخدام النص المخصص للعنوان
           labelStyle: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -39,12 +46,7 @@ class IssueTypeDropdown extends StatelessWidget {
           onChanged: (String? newValue) {
             onChanged(newValue!);
           },
-          items: [
-            'اختر نوع البلاغ',
-            'مشكلة تقنية',
-            'مشكلة في الخدمة',
-            'مشكلة في الطلب'
-          ].map<DropdownMenuItem<String>>((String value) {
+          items: items.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value, style: TextStyle(color: Colors.white)),

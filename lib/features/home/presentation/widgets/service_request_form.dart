@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:asir_amanah/features/home/presentation/widgets/attach_image_button.dart';
 import 'package:asir_amanah/features/home/presentation/widgets/issue_description_field.dart';
 import 'package:asir_amanah/features/home/presentation/widgets/issue_type_dropdown.dart';
@@ -5,23 +7,22 @@ import 'package:asir_amanah/features/onBoarding/presentation/widgets/custom_bott
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 
-class ReportForm extends StatefulWidget {
-  final Function(String) onReportSubmitted;
+class ServiceRequestForm extends StatefulWidget {
+  final Function(String) onRequestSubmitted;
   final VoidCallback onCancel;
 
-  const ReportForm(
-      {required this.onReportSubmitted, required this.onCancel, Key? key})
+  const ServiceRequestForm(
+      {required this.onRequestSubmitted, required this.onCancel, Key? key})
       : super(key: key);
 
   @override
-  _ReportFormState createState() => _ReportFormState();
+  _ServiceRequestFormState createState() => _ServiceRequestFormState();
 }
 
-class _ReportFormState extends State<ReportForm> {
-  String selectedIssueType = 'اختر نوع البلاغ';
-  String description = '';
+class _ServiceRequestFormState extends State<ServiceRequestForm> {
+  String selectedRequestType = 'اختر نوع الطلب';
+  String requestSuccess = '';
   File? _image;
 
   void _pickImage() async {
@@ -113,7 +114,7 @@ class _ReportFormState extends State<ReportForm> {
             ),
             SizedBox(width: 8),
             Text(
-              'الإبلاغ عن مشكلة',
+              'تقديم طلب خدمة',
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -123,40 +124,39 @@ class _ReportFormState extends State<ReportForm> {
         ),
         SizedBox(height: 16),
 
-        // Call the IssueTypeDropdown widget
+        // Call the IssueTypeDropdown widget (can be renamed to RequestTypeDropdown)
         IssueTypeDropdown(
-          selectedIssueType: selectedIssueType,
+          selectedIssueType: selectedRequestType,
           onChanged: (value) {
             setState(() {
-              selectedIssueType = value;
+              selectedRequestType = value;
             });
           },
-          labelText: 'اختر نوع البلاغ',
+          labelText: 'اختر نوع الطلب',
           items: [
-            'اختر نوع البلاغ',
-            'بلاغ نظافة',
-            'بلاغ تسرب مياه',
-            'بلاغ إنارة',
-            'بلاغ إشغالات',
-            'بلاغ تطوير طرق',
-            'بلاغ مخالفات بناء',
-            'بلاغ حشرات أو آفات',
-            'بلاغ خدمية عامة',
+            'اختر نوع الطلب',
+            'طلب دعم فني',
+            'طلب استفسار',
+            'طلب صيانة طرق',
+            'طلب رصف طرق',
+            'طلب تنظيف أرصفة',
+            'طلب تطوير مشاريع',
+            'طلب تراخيص بناء',
           ],
         ),
 
         SizedBox(height: 16),
 
-        // Call the IssueDescriptionField widget
+        // Call the IssueDescriptionField widget (can be renamed to RequestDescriptionField)
         IssueDescriptionField(
-          description: description,
+          description: requestSuccess,
           onChanged: (value) {
             setState(() {
-              description = value;
+              requestSuccess = value;
             });
           },
-          labelText: 'أدخل وصف البلاغ',
-          hintText: 'وصف البلاغ بالتفصيل هنا...',
+          labelText: 'أدخل وصف الطلب',
+          hintText: 'وصف الطلب بالتفصيل هنا...',
         ),
 
         SizedBox(height: 16),
@@ -171,11 +171,11 @@ class _ReportFormState extends State<ReportForm> {
 
         // CustomGeneralButton instead of ElevatedButton
         CustomGeneralButton(
-          text: 'تقديم البلاغ',
+          text: 'تقديم الطلب',
           onTap: () {
-            final reportNumber =
-                "BLG${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}";
-            widget.onReportSubmitted(reportNumber);
+            final requestSuccess =
+                "REQ${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}";
+            widget.onRequestSubmitted(requestSuccess);
           },
         ),
         SizedBox(height: 16),
