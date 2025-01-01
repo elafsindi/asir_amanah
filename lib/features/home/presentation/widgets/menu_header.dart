@@ -1,3 +1,4 @@
+import 'package:asir_amanah/features/notifications/presentation/notifications_view.dart';
 import 'package:flutter/material.dart';
 
 class MenuHeader extends StatelessWidget {
@@ -12,7 +13,7 @@ class MenuHeader extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
         decoration: BoxDecoration(
-          color: Color(0xFF48677B).withOpacity(0.3),
+          color: Color(0xFF212934).withOpacity(0.9),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Row(
@@ -21,7 +22,7 @@ class MenuHeader extends StatelessWidget {
             Row(
               children: [
                 PopupMenuButton<int>(
-                  color: Color(0xFF48677B).withOpacity(0.9),
+                  color: Color.fromARGB(186, 56, 74, 86).withOpacity(0.9),
                   icon: Icon(Icons.grid_view, color: Colors.white, size: 20),
                   onSelected: onMenuSelection,
                   offset: Offset(0, 40),
@@ -93,7 +94,15 @@ class MenuHeader extends StatelessWidget {
             ),
             IconButton(
               icon: Icon(Icons.notifications, color: Colors.white),
-              onPressed: () {},
+              onPressed: () {
+                // استدعاء صفحة الإشعارات عند الضغط على الأيقونة
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NotificationsView(), // استدعاء صفحة الإشعارات
+                  ),
+                );
+              },
             ),
           ],
         ),

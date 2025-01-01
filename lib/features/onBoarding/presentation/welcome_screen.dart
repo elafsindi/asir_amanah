@@ -3,7 +3,6 @@ import 'package:asir_amanah/core/constants.dart';
 import 'package:asir_amanah/core/utils/size_config.dart';
 import 'package:asir_amanah/core/widgets/space_widget.dart';
 import 'package:asir_amanah/features/Auth/presentation/pages/login/login_view.dart';
-import 'package:asir_amanah/features/Auth/presentation/pages/signup/signup_view.dart';
 import 'package:asir_amanah/features/onBoarding/presentation/widgets/custom_bottons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,7 +54,7 @@ class WelcomeScreen extends StatelessWidget {
                   onTap: () {
                     Get.to(() => LoginView());
                   },
-                  text: 'تسجيل الدخول عبر الهوية الوطنية',
+                  text: 'تسجيل الدخول عبر البريد الالكتروني',
                 ),
                 VerticalSpace(3),
                 Row(

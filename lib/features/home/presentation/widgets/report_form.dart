@@ -155,8 +155,8 @@ class _ReportFormState extends State<ReportForm> {
               description = value;
             });
           },
-          labelText: 'أدخل وصف البلاغ',
-          hintText: 'وصف البلاغ بالتفصيل هنا...',
+          labelText: 'وصف البلاغ',
+          hintText: 'ادخل وصف البلاغ ...',
         ),
 
         SizedBox(height: 16),

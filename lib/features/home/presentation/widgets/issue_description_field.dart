@@ -1,7 +1,7 @@
 import 'package:asir_amanah/core/constants.dart';
 import 'package:flutter/material.dart';
 
-class IssueDescriptionField extends StatelessWidget {
+class IssueDescriptionField extends StatefulWidget {
   final String description;
   final Function(String) onChanged;
   final String labelText; // النص المستخدم للعنوان (label)
@@ -15,12 +15,27 @@ class IssueDescriptionField extends StatelessWidget {
   });
 
   @override
+  _IssueDescriptionFieldState createState() => _IssueDescriptionFieldState();
+}
+
+class _IssueDescriptionFieldState extends State<IssueDescriptionField> {
+  // إضافة FocusNode للتحكم في إخفاء الكيبورد
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    // تأكد من تنظيف الـ FocusNode عند التخلص من الودجت
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          labelText, // استخدام النص الذي تم تمريره
+          widget.labelText, // استخدام النص الذي تم تمريره
           style: TextStyle(
             color: Colors.white,
             fontSize: 14.0,
@@ -29,13 +44,14 @@ class IssueDescriptionField extends StatelessWidget {
         ),
         SizedBox(height: 8),
         TextField(
+          focusNode: _focusNode,
           decoration: InputDecoration(
-            hintText: hintText, 
+            hintText: widget.hintText, 
             hintStyle: TextStyle(
               color: Colors.white.withOpacity(0.6), 
             ),
             filled: true,
-            fillColor: Colors.transparent,
+            fillColor: const Color.fromARGB(0, 170, 51, 51),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: Color(kMainColor), width: 2.0),
@@ -50,8 +66,13 @@ class IssueDescriptionField extends StatelessWidget {
             ),
           ),
           maxLines: 4,
-          onChanged: onChanged,
+          onChanged: widget.onChanged,
           style: TextStyle(color: Colors.white),
+          textInputAction: TextInputAction.done, // زر الكيبورد "تم"
+          onEditingComplete: () {
+            // إخفاء الكيبورد عند الضغط على "تم"
+            _focusNode.unfocus();
+          },
         ),
       ],
     );

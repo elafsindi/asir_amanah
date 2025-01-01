@@ -6,6 +6,7 @@ class CustomTextFormField extends StatelessWidget {
   final ValueSetter? onSaved;
   final ValueSetter? onChanged;
   final int? maxLines;
+  
   const CustomTextFormField({
     Key? key,
     @required this.inputType,

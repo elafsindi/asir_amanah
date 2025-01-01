@@ -155,8 +155,8 @@ class _ServiceRequestFormState extends State<ServiceRequestForm> {
               requestSuccess = value;
             });
           },
-          labelText: 'أدخل وصف الطلب',
-          hintText: 'وصف الطلب بالتفصيل هنا...',
+          labelText: 'وصف الطلب',
+          hintText: 'ادخل وصف الطلب ...',
         ),
 
         SizedBox(height: 16),
